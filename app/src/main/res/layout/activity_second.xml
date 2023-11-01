@@ -19,7 +19,7 @@
     <!-- Welcome message -->
     <TextView
         android:id="@+id/welcome"
-        android:layout_width="0dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Welcome in Lotto game. Please fill the personal informations."
         app:layout_constraintTop_toBottomOf="@+id/imageView"
@@ -30,26 +30,29 @@
     <!-- Number Picker -->
     <NumberPicker
         android:id="@+id/picker"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="200dp"
         android:layout_marginTop="15dp"
-        android:solidColor="#00FF00"
+        android:solidColor="#FFC107"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome" />
 
     <!-- Select button -->
+
+    <!-- Your's numbers message -->
     <Button
         android:id="@+id/SelectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="SELECT"
+        android:backgroundTint="#3F51B5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/picker" />
 
-    <!-- Your's numbers message -->
     <TextView
         android:id="@+id/numbers"
         android:layout_width="wrap_content"
@@ -77,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:text="Submit"
+        android:backgroundTint="#3F51B5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -26,7 +26,7 @@ class SecondActivity : AppCompatActivity() {
         switch_activity_button.isEnabled = false
 
         numberPicker.minValue = 0  // Minimalna wartość
-        numberPicker.maxValue = 99 // Maksymalna wartość
+        numberPicker.maxValue = 49 // Maksymalna wartość
 
         val welcome_text = findViewById<TextView>(R.id.welcome)
         welcome_text.text = "Hello $user_name. Let's pick your lucky numbers!"
@@ -35,12 +35,13 @@ class SecondActivity : AppCompatActivity() {
 
         select_button.setOnClickListener() {
             val number = numberPicker.value
+            if (!selectedNumbers.contains(number)) {
+                selectedNumbers.add(number)
+                selected_numbers_text.text = selectedNumbers.joinToString("   ")
+            }
             if (selectedNumbers.size >= 6) {
                 select_button.isEnabled = false
                 switch_activity_button.isEnabled = true
-            } else if (!selectedNumbers.contains(number)) {
-                selectedNumbers.add(number)
-                selected_numbers_text.text = selectedNumbers.joinToString("   ")
             }
         }
         switch_activity_button.setOnClickListener() {
