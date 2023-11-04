@@ -18,6 +18,7 @@ import android.content.res.ColorStateList
 
 
 class ThirdActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third)
@@ -26,26 +27,17 @@ class ThirdActivity : AppCompatActivity() {
         val user_numbers = intent.getStringExtra("NUMBERS")
         val getnumbers_button = findViewById<Button>(R.id.getnumbers_button)
 
-
+        // creates list of numbers from 0 to 49, shuffles it and takes first 6 numbers
+        // this way we get 6 random numbers without repetition
         val numbers = (0..49).shuffled().take(6)
 
+        // I have created my own custom view - CustomLottoBallView
         val ball1 = findViewById<CustomLottoBallView>(R.id.customCircleView1)
-        ball1.setNumber(numbers[0])
         val ball2 = findViewById<CustomLottoBallView>(R.id.customCircleView2)
-        ball2.setNumber(numbers[1])
         val ball3 = findViewById<CustomLottoBallView>(R.id.customCircleView3)
-        ball3.setNumber(numbers[2])
         val ball4 = findViewById<CustomLottoBallView>(R.id.customCircleView4)
-        ball4.setNumber(numbers[3])
         val ball5 = findViewById<CustomLottoBallView>(R.id.customCircleView5)
-        ball5.setNumber(numbers[4])
         val ball6 = findViewById<CustomLottoBallView>(R.id.customCircleView6)
-        ball6.setNumber(numbers[5])
-
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-        progressBar.max = 6
-        val delayMillis = 1000L
-        val handler = Handler(Looper.getMainLooper())
 
         val balls = listOf(
             ball1,
@@ -69,10 +61,42 @@ class ThirdActivity : AppCompatActivity() {
             Color.GREEN,
         )
 
-        for (ball in balls) {
-            //ustaw backgroundTint jako losowy kolor z listy colors
+        // sets number and random color for each ball
+        for ((i, ball) in balls.withIndex()) {
+            ball.setNumber(numbers[i])
             ball.setCircleColor(colors.random())
         }
+
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        progressBar.max = 6
+        val delayMillis = 1000L
+        val handler = Handler(Looper.getMainLooper())
+
+        var matches = 0
+        for (number in numbers) {
+            if (user_numbers!!.split(" ").contains(number.toString())) {
+                matches += 1
+            }
+        }
+
+        fun calculateWinningAmount(matches: Int): Int {
+            return when (matches) {
+                3 -> 24
+                4 -> 100
+                5 -> 10000
+                6 -> 1000000
+                else -> 0
+            }
+        }
+
+        val winText = findViewById<TextView>(R.id.winText)
+        val winningAmount = calculateWinningAmount(matches)
+        if (winningAmount > 0) {
+            winText.text = "WYGRAŁEŚ: $winningAmount!"
+        } else {
+            winText.text = "Spróbuj ponownie!"
+        }
+
 
         getnumbers_button.setOnClickListener {
             getnumbers_button.isEnabled = false
@@ -90,12 +114,21 @@ class ThirdActivity : AppCompatActivity() {
                         )
                         val ball = findViewById<CustomLottoBallView>(id)
                         ball.visibility = View.VISIBLE
+                        // If a ball number matches a guess number,
+                        // number on the ball is colored green, otherwise red
                         if (ball.getNumber() in user_numbers!!.split(" ")) {
                             ball.setTextColor(Color.GREEN)
                         } else {
                             ball.setTextColor(Color.RED)
                         }
+
+                        if (progressStatus == 6) {
+                            winText.visibility = View.VISIBLE
+                        }
+
                     }
+
+
                     try {
                         Thread.sleep(delayMillis)
                     } catch (e: InterruptedException) {

@@ -12,7 +12,6 @@ import android.widget.EditText
 
 class MainActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         switcheryesno.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                // sprawdzam czy uzytkownik wpisał cokolwiek w pola imienia, emailu i hasla
+                // cheks if all inputs are at least 6 characters long
                 if (nameinput.text.length >= 6 &&
                     emailinput.text.length >= 6 &&
                     passwordinput.text.length >= 6) {

@@ -21,7 +21,8 @@
         android:id="@+id/welcome"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Welcome in Lotto game. Please fill the personal informations."
+        android:text="PLACEHOLDER"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,7 +50,6 @@
         android:text="SELECT"
         android:backgroundTint="#3F51B5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/picker" />
 
@@ -58,7 +58,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Your's numbers:"
+        android:text="Your Lucky Numbers:"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/SelectButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -69,6 +70,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/numbers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -79,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:text="Submit"
+        android:text="SUBMIT"
         android:backgroundTint="#3F51B5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

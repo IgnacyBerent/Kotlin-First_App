@@ -1,0 +1,1 @@
+My first mobile app project, for the course "Mobile Application Development" at the University of Science and Technology in Wrocław.

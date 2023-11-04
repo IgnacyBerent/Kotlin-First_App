@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
-
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout

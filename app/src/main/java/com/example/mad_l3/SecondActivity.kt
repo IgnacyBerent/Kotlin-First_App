@@ -9,7 +9,6 @@ import android.widget.NumberPicker
 
 class SecondActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
@@ -25,14 +24,15 @@ class SecondActivity : AppCompatActivity() {
         val switch_activity_button = findViewById<Button>(R.id.SubmitButton)
         switch_activity_button.isEnabled = false
 
-        numberPicker.minValue = 0  // Minimalna wartość
-        numberPicker.maxValue = 49 // Maksymalna wartość
+        numberPicker.minValue = 0  // Minimum value
+        numberPicker.maxValue = 49 // Maximum value
 
         val welcome_text = findViewById<TextView>(R.id.welcome)
         welcome_text.text = "Hello $user_name. Let's pick your lucky numbers!"
 
         val selectedNumbers = mutableListOf<Int>()
 
+        // picking 6 numbers mechanism
         select_button.setOnClickListener() {
             val number = numberPicker.value
             if (!selectedNumbers.contains(number)) {

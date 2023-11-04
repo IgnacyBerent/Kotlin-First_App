@@ -19,11 +19,11 @@
         android:id="@+id/welcome"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Welcome in Lotto game. Please fill the personal informations."
+        android:text="Welcome in Lotto game.\nPlease fill the personal informations."
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/NameInput"
@@ -80,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:text="Let's play!"
+        android:text="LET'S PLAY!"
         android:backgroundTint="#3F51B5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
