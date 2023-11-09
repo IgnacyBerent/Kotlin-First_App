@@ -94,7 +94,7 @@ class ThirdActivity : AppCompatActivity() {
         if (winningAmount > 0) {
             winText.text = "WYGRAŁEŚ: $winningAmount!"
         } else {
-            winText.text = "Spróbuj ponownie!"
+            winText.text = "Try Again!"
         }
 
 
