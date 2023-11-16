@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "369005511018",
+    "project_id": "firstapp-mad",
+    "storage_bucket": "firstapp-mad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369005511018:android:5b91f4a52a8f9980596513",
+        "android_client_info": {
+          "package_name": "com.example.mad_l3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1RUo5qJs2txPeYWWg2x-86pz3V70LtEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
