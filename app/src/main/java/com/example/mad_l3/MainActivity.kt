@@ -13,9 +13,10 @@ import android.text.style.StyleSpan
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Switch
-import androidx.core.view.get
 import android.widget.EditText
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import android.graphics.Color
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         val emailinput = findViewById<EditText>(R.id.EmailInput)
         val passwordinput = findViewById<EditText>(R.id.PasswordInput)
-        val switch_activity_button = findViewById<Button>(R.id.SubmitButton)
+        val loginButton = findViewById<Button>(R.id.SubmitButton)
 
         val registerLink = findViewById<TextView>(R.id.registerLink)
         val spannableString = SpannableString("Don't have an account? Register")
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, RegisterActivity::class.java)
                 startActivity(intent)
             }
+
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
                 ds.isUnderlineText = false
@@ -48,20 +50,56 @@ class MainActivity : AppCompatActivity() {
         registerLink.text = spannableString
         registerLink.movementMethod = LinkMovementMethod.getInstance()
 
-        switch_activity_button.setOnClickListener() {
-            if (emailinput.text.length >= 6 &&
-                passwordinput.text.length >= 6)
-            {
-                val intent = Intent(this, SecondActivity::class.java)
-                // place to sendinformation to fire base and login user
-                startActivity(intent)
-            }
-            else {
-                emailinput.error = "Email must be at least 6 characters long"
-                passwordinput.error = "Password must be at least 6 characters long"
-            }
-
+        loginButton.setOnClickListener() {
+            val email = emailinput.text.toString()
+            val password = passwordinput.text.toString()
+            loginUser(email, password)
         }
 
+    }
+
+    private fun showErrorSnackBar(message: String) {
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+            .setBackgroundTint(Color.RED)
+            .setTextColor(Color.WHITE)
+            .show()
+    }
+
+    private fun validateLoginDetails(email: String, password: String): Boolean {
+        return when {
+            // email must not be empty
+            email.isEmpty() -> {
+                showErrorSnackBar("Please enter your email address.")
+                false
+            }
+            // password must not be empty
+            password.isEmpty() -> {
+                showErrorSnackBar("Please enter your password.")
+                false
+            }
+
+            else -> {
+                true
+            }
+        }
+    }
+
+    private fun loginUser(email: String, password: String) {
+        if (validateLoginDetails(email, password)) {
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        showErrorSnackBar("You have successfully logged in.")
+                        val user = FirebaseAuth.getInstance().currentUser;
+                        val uid = user?.email.toString()
+                        val intent = Intent(this, SecondActivity::class.java)
+                        intent.putExtra("uID", uid)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        showErrorSnackBar("Login failed. Please try again.")
+                    }
+                }
+        }
     }
 }

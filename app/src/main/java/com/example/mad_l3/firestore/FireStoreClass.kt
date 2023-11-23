@@ -13,13 +13,7 @@ class FireStoreClass {
         mFireStore.collection("users")
             .document(userInfo.id)
             .set(userInfo, SetOptions.merge())
-            .addOnSuccessListener {
-                activity.userRegistrationSuccess()
-
-            }
             .addOnFailureListener{
-
             }
     }
-
 }

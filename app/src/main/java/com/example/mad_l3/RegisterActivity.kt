@@ -1,6 +1,7 @@
 package com.example.mad_l3
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -34,6 +35,7 @@ class RegisterActivity : AppCompatActivity() {
         val nameinput = findViewById<EditText>(R.id.NameInput)
         val emailinput = findViewById<EditText>(R.id.EmailInput)
         val passwordinput = findViewById<EditText>(R.id.PasswordInput)
+        val repeatpasswordinput = findViewById<EditText>(R.id.RepeatPasswordInput)
         val registerButton = findViewById<Button>(R.id.SubmitButton)
         registerButton.isEnabled = false
         val switcheryesno = findViewById<Switch>(R.id.switchyesno)
@@ -53,7 +55,8 @@ class RegisterActivity : AppCompatActivity() {
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 // Goes to Login Activity
-                goToLogin(widget)
+                val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                startActivity(intent)
             }
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
@@ -72,28 +75,36 @@ class RegisterActivity : AppCompatActivity() {
             val userName = nameinput.text.toString()
             val userLogin = emailinput.text.toString()
             val userPassword = passwordinput.text.toString()
+            val repeatedPassword = repeatpasswordinput.text.toString()
 
-            registerUser(userName, userLogin, userPassword)
-
-            val intent = Intent(this, SecondActivity::class.java)
-            startActivity(intent)
-
+            registerUser(userName, userLogin, userPassword, repeatedPassword)
         }
 
     }
 
-    fun goToLogin(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+
 
     private fun showErrorSnackBar(message: String) {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
+            .setBackgroundTint(Color.RED)
+            .setTextColor(Color.WHITE)
+            .show()
     }
 
-    private fun validateRegisterDetails(name: String, email: String, password: String): Boolean {
+    private fun validateRegisterDetails(
+        name: String,
+        email: String,
+        password: String,
+        repeated_password: String):
+            Boolean {
+
         return when {
+            // password and repeated password must be the same
+            password != repeated_password -> {
+                showErrorSnackBar("Password and repeated password must be the same")
+                false
+            }
+            // name must not be empty
             name.isEmpty() -> {
                 showErrorSnackBar("Please enter a name")
                 false
@@ -103,6 +114,7 @@ class RegisterActivity : AppCompatActivity() {
                 showErrorSnackBar("Name must be at least 2 characters long")
                 false
             }
+            // email must not be empty
             email.isEmpty() -> {
                 showErrorSnackBar("Please enter an email address")
                 false
@@ -112,6 +124,7 @@ class RegisterActivity : AppCompatActivity() {
                 showErrorSnackBar("Please enter a valid email address")
                 false
             }
+            // password must not be empty
             password.isEmpty() -> {
                 showErrorSnackBar("Please enter a password")
                 false
@@ -151,11 +164,6 @@ class RegisterActivity : AppCompatActivity() {
                 showErrorSnackBar("Password must not contain whitespaces")
                 false
             }
-            // password must not contain non-ASCII characters
-            !password.all { it.isLetterOrDigit() } -> {
-                showErrorSnackBar("Password must not contain non-ASCII characters")
-                false
-            }
 
             else -> {
                 true
@@ -164,8 +172,8 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerUser(name: String, email: String, password: String) {
-        if (validateRegisterDetails(name, email, password)) {
+    private fun registerUser(name: String, email: String, password: String, repeated_password: String) {
+        if (validateRegisterDetails(name, email, password, repeated_password)) {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                     OnCompleteListener<AuthResult> { task ->
@@ -173,7 +181,6 @@ class RegisterActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             // Firebase registered user
                             val firebaseUser: FirebaseUser = task.result!!.user!!
-                            showErrorSnackBar("You are registered successfully. Your user id is ${firebaseUser.uid}")
                             // Registered Email
                             val registeredEmail = firebaseUser.email!!
                             val user = User(
@@ -183,18 +190,13 @@ class RegisterActivity : AppCompatActivity() {
                                 email,
                             )
                             FireStoreClass().registerUserFS(this, user)
+                            val intent = Intent(this, SecondActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         } else {
-                            showErrorSnackBar(task.exception!!.message.toString())
+                            showErrorSnackBar("Registration failed. Please try again.")
                         }
                     })
         }
     }
-
-    fun  userRegistrationSuccess(){
-        Toast.makeText(this@RegisterActivity, resources.getString(),
-            Toast.LENGTH_LONG).show()
-    }
-
-
-
 }
