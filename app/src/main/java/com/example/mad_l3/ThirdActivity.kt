@@ -7,20 +7,17 @@ import android.widget.ProgressBar
 import android.widget.Button
 import android.os.Handler
 import android.graphics.Color
-import androidx.core.view.isVisible
 import android.view.View
 import android.os.Looper
-import android.widget.Toast
-import android.graphics.PorterDuff
-
-
-import android.content.res.ColorStateList
+import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
 
 
 class ThirdActivity : AppCompatActivity() {
 
+    private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        rootView = findViewById<View>(android.R.id.content)
         setContentView(R.layout.activity_third)
 
         val intent = intent
@@ -89,12 +86,15 @@ class ThirdActivity : AppCompatActivity() {
             }
         }
 
-        val winText = findViewById<TextView>(R.id.winText)
         val winningAmount = calculateWinningAmount(matches)
+        var winText: String
+        var winColor: String
         if (winningAmount > 0) {
-            winText.text = "WYGRAŁEŚ: $winningAmount!"
+            winText = "WYGRAŁEŚ: $winningAmount!"
+            winColor = "green"
         } else {
-            winText.text = "Try Again!"
+            winText = "Try Again!"
+            winColor = "red"
         }
 
 
@@ -123,12 +123,9 @@ class ThirdActivity : AppCompatActivity() {
                         }
 
                         if (progressStatus == 6) {
-                            winText.visibility = View.VISIBLE
+                            showErrorSnackBar(rootView, winText, winColor)
                         }
-
                     }
-
-
                     try {
                         Thread.sleep(delayMillis)
                     } catch (e: InterruptedException) {

@@ -22,14 +22,17 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.android.material.snackbar.Snackbar
+import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
+
 
 class RegisterActivity : AppCompatActivity() {
 
+    private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
         super.onCreate(savedInstanceState)
+        rootView = findViewById<View>(android.R.id.content)
         setContentView(R.layout.activity_register)
 
         val nameinput = findViewById<EditText>(R.id.NameInput)
@@ -83,14 +86,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
-
-    private fun showErrorSnackBar(message: String) {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
-            .setBackgroundTint(Color.RED)
-            .setTextColor(Color.WHITE)
-            .show()
-    }
-
     private fun validateRegisterDetails(
         name: String,
         email: String,
@@ -101,67 +96,67 @@ class RegisterActivity : AppCompatActivity() {
         return when {
             // password and repeated password must be the same
             password != repeated_password -> {
-                showErrorSnackBar("Password and repeated password must be the same")
+                showErrorSnackBar(rootView,"Passwords do not match")
                 false
             }
             // name must not be empty
             name.isEmpty() -> {
-                showErrorSnackBar("Please enter a name")
+                showErrorSnackBar(rootView,"Please enter a name")
                 false
             }
             // name must be at least 2 characters long
             name.length < 2 -> {
-                showErrorSnackBar("Name must be at least 2 characters long")
+                showErrorSnackBar(rootView, "Name must be at least 2 characters long")
                 false
             }
             // email must not be empty
             email.isEmpty() -> {
-                showErrorSnackBar("Please enter an email address")
+                showErrorSnackBar(rootView, "Please enter an email address")
                 false
             }
             // email must be in a valid format
             !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                showErrorSnackBar("Please enter a valid email address")
+                showErrorSnackBar(rootView, "Please enter a valid email address")
                 false
             }
             // password must not be empty
             password.isEmpty() -> {
-                showErrorSnackBar("Please enter a password")
+                showErrorSnackBar(rootView, "Please enter a password")
                 false
             }
             // password must be at least 8 characters long
             password.length < 8 -> {
-                showErrorSnackBar("Password must be at least 8 characters long")
+                showErrorSnackBar(rootView, "Password must be at least 8 characters long")
                 false
             }
             // password must contain at least one digit
             !password.any { it.isDigit() } -> {
-                showErrorSnackBar("Password must contain at least one digit")
+                showErrorSnackBar(rootView, "Password must contain at least one digit")
                 false
             }
             // password must contain at least one letter
             !password.any { it.isLetter() } -> {
-                showErrorSnackBar("Password must contain at least one letter")
+                showErrorSnackBar(rootView, "Password must contain at least one letter")
                 false
             }
             // password must contain at least one special character
             !password.any { !it.isLetterOrDigit() } -> {
-                showErrorSnackBar("Password must contain at least one special character")
+                showErrorSnackBar(rootView, "Password must contain at least one special character")
                 false
             }
             // password must contain at least one uppercase letter
             !password.any { it.isUpperCase() } -> {
-                showErrorSnackBar("Password must contain at least one uppercase letter")
+                showErrorSnackBar(rootView, "Password must contain at least one uppercase letter")
                 false
             }
             // password must contain at least one lowercase letter
             !password.any { it.isLowerCase() } -> {
-                showErrorSnackBar("Password must contain at least one lowercase letter")
+                showErrorSnackBar(rootView, "Password must contain at least one lowercase letter")
                 false
             }
             // password must not contain whitespaces
             password.any { it.isWhitespace() } -> {
-                showErrorSnackBar("Password must not contain whitespaces")
+                showErrorSnackBar(rootView, "Password must not contain whitespaces")
                 false
             }
 
@@ -194,7 +189,7 @@ class RegisterActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else {
-                            showErrorSnackBar("Registration failed. Please try again.")
+                            showErrorSnackBar(rootView, "Registration failed. Please try again.")
                         }
                     })
         }

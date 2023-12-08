@@ -14,18 +14,18 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.EditText
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import android.graphics.Color
+import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
 
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        rootView = findViewById<View>(android.R.id.content)
+
 
         val emailinput = findViewById<EditText>(R.id.EmailInput)
         val passwordinput = findViewById<EditText>(R.id.PasswordInput)
@@ -58,23 +58,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun showErrorSnackBar(message: String) {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
-            .setBackgroundTint(Color.RED)
-            .setTextColor(Color.WHITE)
-            .show()
-    }
-
     private fun validateLoginDetails(email: String, password: String): Boolean {
         return when {
             // email must not be empty
             email.isEmpty() -> {
-                showErrorSnackBar("Please enter your email address.")
+                showErrorSnackBar(rootView,"Please enter your email address.")
                 false
             }
             // password must not be empty
             password.isEmpty() -> {
-                showErrorSnackBar("Please enter your password.")
+                showErrorSnackBar(rootView,"Please enter your password.")
                 false
             }
 
@@ -89,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        showErrorSnackBar("You have successfully logged in.")
+                        showErrorSnackBar(rootView, "Login successful.", "green")
                         val user = FirebaseAuth.getInstance().currentUser;
                         val uid = user?.email.toString()
                         val intent = Intent(this, SecondActivity::class.java)
@@ -97,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        showErrorSnackBar("Login failed. Please try again.")
+                        showErrorSnackBar(rootView, "Login failed.")
                     }
                 }
         }
