@@ -26,7 +26,7 @@
         android:layout_marginTop="15dp"
         android:backgroundTint="#3F51B5"
         android:text="GET NUMBERS!"
-        android:textSize="30sp"
+        android:textSize="27sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -99,6 +99,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/customCircleView5"
         app:layout_constraintTop_toBottomOf="@+id/customCircleView2" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
