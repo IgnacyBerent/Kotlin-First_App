@@ -10,9 +10,14 @@ import android.view.View
 import android.os.Looper
 import com.example.mad_l3.custom_elements.CustomLottoBallView
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
-
+import com.example.mad_l3.firestore.FireStoreData
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 
 class DrawNumbersActivity : AppCompatActivity() {
+
+    val db = Firebase.firestore
 
     private val colors = listOf(
         Color.BLUE,
@@ -33,8 +38,6 @@ class DrawNumbersActivity : AppCompatActivity() {
         rootView = findViewById<View>(android.R.id.content)
         setContentView(R.layout.activity_third)
 
-        val intent = intent
-        val userNumbers = intent.getStringExtra("NUMBERS")
         val getNumbersButton = findViewById<Button>(R.id.getnumbers_button)
 
         // I have created my own custom view - CustomLottoBallView
@@ -54,6 +57,23 @@ class DrawNumbersActivity : AppCompatActivity() {
             ball6,
         )
 
+        var userNumbers: IntArray? = IntArray(6)
+
+        db.collection("usersNumbers")
+            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val dbData = documentSnapshot.toObject(FireStoreData::class.java)
+                    userNumbers = dbData?.selNumb?.toIntArray()
+                }
+            }
+            .addOnFailureListener { e ->
+                // Handle failure
+                println("Error getting document usersNumbers - " +
+                        "${FirebaseAuth.getInstance().currentUser?.email}: $e")
+            }
+
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.max = 6
@@ -70,21 +90,11 @@ class DrawNumbersActivity : AppCompatActivity() {
             getNumbersButton.isEnabled = false
             // creates list of numbers from 0 to 49, shuffles it and takes first 6 numbers
             // this way we get 6 random numbers without repetition
-            val numbers = (0..49).shuffled().take(6)
+            val drawnNumbers = (0..49).shuffled().take(6)
             var matches = 0
-            for (number in numbers) {
-                if (userNumbers!!.split(" ").contains(number.toString())) {
+            for (number in drawnNumbers) {
+                if (userNumbers!!.contains(number)) {
                     matches += 1
-                }
-            }
-
-            fun calculateWinningAmount(matches: Int): Int {
-                return when (matches) {
-                    3 -> 24
-                    4 -> 100
-                    5 -> 10000
-                    6 -> 1000000
-                    else -> 0
                 }
             }
 
@@ -102,7 +112,7 @@ class DrawNumbersActivity : AppCompatActivity() {
 
             // sets number and random color for each ball
             for ((i, ball) in balls.withIndex()) {
-                ball.setNumber(numbers[i])
+                ball.setNumber(drawnNumbers[i])
                 ball.setCircleColor(colors.random())
             }
 
@@ -121,7 +131,7 @@ class DrawNumbersActivity : AppCompatActivity() {
                         ball.visibility = View.VISIBLE
                         // If a ball number matches a guess number,
                         // number on the ball is colored green, otherwise red
-                        if (ball.getNumber() in userNumbers!!.split(" ")) {
+                        if (ball.getNumber().toInt() in userNumbers!!) {
                             ball.setTextColor(Color.GREEN)
                         } else {
                             ball.setTextColor(Color.RED)
@@ -138,10 +148,41 @@ class DrawNumbersActivity : AppCompatActivity() {
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     }
+
+                    runOnUiThread {
+                        val updates = mapOf(
+                            "win" to winningAmount,
+                            "drawNumb" to drawnNumbers.toList()
+                        )
+
+                        db.collection("usersNumbers")
+                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                            .update(updates)
+                            .addOnSuccessListener {
+                                // Handle success
+                                println("Document updated successfully in usersNumbers" +
+                                        "/${FirebaseAuth.getInstance().currentUser?.email}")
+                            }
+                            .addOnFailureListener { e ->
+                                // Handle failure
+                                println("Error updating document in usersNumbers" +
+                                        "/${FirebaseAuth.getInstance().currentUser?.email}: $e")
+                            }
+                    }
                 }
             }.start()
         }
 
 
     }
+    private fun calculateWinningAmount(matches: Int): Int {
+        return when (matches) {
+            3 -> 24
+            4 -> 100
+            5 -> 10000
+            6 -> 1000000
+            else -> 0
+        }
+    }
+
 }

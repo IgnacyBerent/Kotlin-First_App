@@ -22,17 +22,21 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class RegisterActivity : AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         rootView = findViewById<View>(android.R.id.content)
         setContentView(R.layout.activity_register)
+
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
         val nameinput = findViewById<EditText>(R.id.NameInput)
         val emailinput = findViewById<EditText>(R.id.EmailInput)
@@ -168,17 +172,19 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun registerUser(name: String, email: String, password: String, repeated_password: String) {
         if (validateRegisterDetails(name, email, password, repeated_password)) {
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+            auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                     OnCompleteListener<AuthResult> { task ->
                         // If the registration is successfully done
                         if (task.isSuccessful) {
-                            // Firebase registered user
-                            val firebaseUser: FirebaseUser = task.result!!.user!!
-                            // Registered Email
-                            val registeredEmail = firebaseUser.email!!
+                            showErrorSnackBar(
+                                rootView,
+                                "Registration successful.",
+                                "green"
+                            )
+                            val currentUserId = auth.currentUser?.uid.toString()
                             val user = User(
-                                "Testowe ID",
+                                currentUserId,
                                 name,
                                 true,
                                 email,
