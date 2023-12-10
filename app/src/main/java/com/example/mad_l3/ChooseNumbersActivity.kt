@@ -10,7 +10,7 @@ import android.widget.NumberPicker
 import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
 
 
-class SecondActivity : AppCompatActivity() {
+class ChooseNumbersActivity : AppCompatActivity() {
 
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +57,7 @@ class SecondActivity : AppCompatActivity() {
             }
         }
         switch_activity_button.setOnClickListener() {
-            val intent2 = Intent(this, ThirdActivity::class.java)
+            val intent2 = Intent(this, DrawNumbersActivity::class.java)
             intent2.putExtra("NAME", user_name)
             intent2.putExtra("EMAIL", user_email)
             intent2.putExtra("PASSWORD", user_password)

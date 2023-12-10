@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
 
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 // Start RegisterActivity
-                val intent = Intent(this@MainActivity, RegisterActivity::class.java)
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                 startActivity(intent)
             }
 
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                         showErrorSnackBar(rootView, "Login successful.", "green")
                         val user = FirebaseAuth.getInstance().currentUser;
                         val uid = user?.email.toString()
-                        val intent = Intent(this, SecondActivity::class.java)
+                        val intent = Intent(this, ChooseNumbersActivity::class.java)
                         intent.putExtra("uID", uid)
                         startActivity(intent)
                         finish()

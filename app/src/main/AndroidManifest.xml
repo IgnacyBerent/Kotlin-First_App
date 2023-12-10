@@ -29,13 +29,13 @@
         </receiver>
 
         <activity
-            android:name=".ThirdActivity"
+            android:name=".DrawNumbersActivity"
             android:exported="false" />
         <activity
-            android:name=".SecondActivity"
+            android:name=".ChooseNumbersActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

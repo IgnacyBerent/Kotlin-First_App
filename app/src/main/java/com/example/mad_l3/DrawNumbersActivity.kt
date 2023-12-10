@@ -11,7 +11,7 @@ import android.os.Looper
 import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
 
 
-class ThirdActivity : AppCompatActivity() {
+class DrawNumbersActivity : AppCompatActivity() {
 
     private val colors = listOf(
         Color.BLUE,

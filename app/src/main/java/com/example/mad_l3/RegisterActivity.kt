@@ -1,7 +1,6 @@
 package com.example.mad_l3
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -58,7 +57,7 @@ class RegisterActivity : AppCompatActivity() {
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 // Goes to Login Activity
-                val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                 startActivity(intent)
             }
             override fun updateDrawState(ds: TextPaint) {
@@ -185,7 +184,7 @@ class RegisterActivity : AppCompatActivity() {
                                 email,
                             )
                             FireStoreClass().registerUserFS(this, user)
-                            val intent = Intent(this, SecondActivity::class.java)
+                            val intent = Intent(this, ChooseNumbersActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
