@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/getnumbers_button" />
 
 
-    <com.example.mad_l3.CustomLottoBallView
+    <com.example.mad_l3.custom_elements.CustomLottoBallView
         android:id="@+id/customCircleView1"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -53,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
-    <com.example.mad_l3.CustomLottoBallView
+    <com.example.mad_l3.custom_elements.CustomLottoBallView
         android:id="@+id/customCircleView2"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
-    <com.example.mad_l3.CustomLottoBallView
+    <com.example.mad_l3.custom_elements.CustomLottoBallView
         android:id="@+id/customCircleView3"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -73,7 +73,7 @@
         app:layout_constraintStart_toEndOf="@+id/customCircleView2"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
-    <com.example.mad_l3.CustomLottoBallView
+    <com.example.mad_l3.custom_elements.CustomLottoBallView
         android:id="@+id/customCircleView4"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -82,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/customCircleView2" />
 
-    <com.example.mad_l3.CustomLottoBallView
+    <com.example.mad_l3.custom_elements.CustomLottoBallView
         android:id="@+id/customCircleView5"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -91,7 +91,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/customCircleView2" />
 
-    <com.example.mad_l3.CustomLottoBallView
+    <com.example.mad_l3.custom_elements.CustomLottoBallView
         android:id="@+id/customCircleView6"
         android:layout_width="100dp"
         android:layout_height="100dp"

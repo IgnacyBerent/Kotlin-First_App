@@ -21,7 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
+import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 
 
 class RegisterActivity : AppCompatActivity() {

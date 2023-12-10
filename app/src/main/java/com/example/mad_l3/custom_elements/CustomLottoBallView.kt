@@ -1,14 +1,12 @@
-package com.example.mad_l3
+package com.example.mad_l3.custom_elements
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.widget.RemoteViews
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.mad_l3.R
 
 class CustomLottoBallView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyle: Int = 0

@@ -17,7 +17,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".CustomLottoBallView"
+            android:name=".custom_elements.CustomLottoBallView"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

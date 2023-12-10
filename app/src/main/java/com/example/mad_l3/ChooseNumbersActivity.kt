@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.NumberPicker
-import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
+import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 
 
 class ChooseNumbersActivity : AppCompatActivity() {

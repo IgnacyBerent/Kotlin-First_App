@@ -8,7 +8,8 @@ import android.os.Handler
 import android.graphics.Color
 import android.view.View
 import android.os.Looper
-import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
+import com.example.mad_l3.custom_elements.CustomLottoBallView
+import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 
 
 class DrawNumbersActivity : AppCompatActivity() {

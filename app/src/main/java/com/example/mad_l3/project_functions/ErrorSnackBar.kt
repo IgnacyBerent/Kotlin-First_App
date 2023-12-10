@@ -1,4 +1,4 @@
-package com.example.mad_l3.projectfunctions
+package com.example.mad_l3.project_functions
 
 import android.graphics.Color
 import com.google.android.material.snackbar.Snackbar

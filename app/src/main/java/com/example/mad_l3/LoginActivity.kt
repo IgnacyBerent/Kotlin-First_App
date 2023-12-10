@@ -15,7 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
-import com.example.mad_l3.projectfunctions.SnackbarHelper.showErrorSnackBar
+import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 
 
 class LoginActivity : AppCompatActivity() {
