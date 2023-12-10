@@ -13,11 +13,10 @@ import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 import com.example.mad_l3.firestore.FireStoreData
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
 class DrawNumbersActivity : AppCompatActivity() {
-
-    val db = Firebase.firestore
 
     private val colors = listOf(
         Color.BLUE,
@@ -31,15 +30,18 @@ class DrawNumbersActivity : AppCompatActivity() {
         Color.RED,
         Color.GREEN,
     )
-
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         rootView = findViewById<View>(android.R.id.content)
         setContentView(R.layout.activity_third)
 
-        val getNumbersButton = findViewById<Button>(R.id.getnumbers_button)
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
+        val getNumbersButton = findViewById<Button>(R.id.getnumbers_button)
         // I have created my own custom view - CustomLottoBallView
         val ball1 = findViewById<CustomLottoBallView>(R.id.customCircleView1)
         val ball2 = findViewById<CustomLottoBallView>(R.id.customCircleView2)
@@ -60,7 +62,7 @@ class DrawNumbersActivity : AppCompatActivity() {
         var userNumbers: IntArray? = IntArray(6)
 
         db.collection("usersNumbers")
-            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+            .document(auth.currentUser?.uid.toString())
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
@@ -71,7 +73,7 @@ class DrawNumbersActivity : AppCompatActivity() {
             .addOnFailureListener { e ->
                 // Handle failure
                 println("Error getting document usersNumbers - " +
-                        "${FirebaseAuth.getInstance().currentUser?.email}: $e")
+                        "${FirebaseAuth.getInstance().currentUser?.uid}: $e")
             }
 
 
@@ -148,7 +150,6 @@ class DrawNumbersActivity : AppCompatActivity() {
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     }
-
                     runOnUiThread {
                         val updates = mapOf(
                             "win" to winningAmount,
@@ -156,17 +157,17 @@ class DrawNumbersActivity : AppCompatActivity() {
                         )
 
                         db.collection("usersNumbers")
-                            .document(FirebaseAuth.getInstance().currentUser?.email.toString())
+                            .document(auth.currentUser?.uid.toString())
                             .update(updates)
                             .addOnSuccessListener {
                                 // Handle success
                                 println("Document updated successfully in usersNumbers" +
-                                        "/${FirebaseAuth.getInstance().currentUser?.email}")
+                                        "/${FirebaseAuth.getInstance().currentUser?.uid}")
                             }
                             .addOnFailureListener { e ->
                                 // Handle failure
                                 println("Error updating document in usersNumbers" +
-                                        "/${FirebaseAuth.getInstance().currentUser?.email}: $e")
+                                        "/${FirebaseAuth.getInstance().currentUser?.uid}: $e")
                             }
                     }
                 }

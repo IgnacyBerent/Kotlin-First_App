@@ -72,12 +72,10 @@ class ChooseNumbersActivity : AppCompatActivity() {
                     "green"
                 )
 
-                val email = FirebaseAuth.getInstance().currentUser?.email.toString()
-                val fireStoreData = FireStoreData(email, selectedNumbers, null, 0.0)
+                val fireStoreData = FireStoreData(currentUserUid, selectedNumbers, null, 0.0)
 
-                val currentUserUid = auth.currentUser?.uid
                 if (currentUserUid != null) {
-                    db.collection("users")
+                    db.collection("usersNumbers")
                         .document(currentUserUid)
                         .set(fireStoreData)
                         .addOnSuccessListener {

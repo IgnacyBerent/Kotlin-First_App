@@ -16,15 +16,21 @@ import android.widget.TextView
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         rootView = findViewById<View>(android.R.id.content)
+
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
 
         val emailinput = findViewById<EditText>(R.id.EmailInput)
@@ -79,14 +85,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginUser(email: String, password: String) {
         if (validateLoginDetails(email, password)) {
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+            auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         showErrorSnackBar(rootView, "Login successful.", "green")
-                        val user = FirebaseAuth.getInstance().currentUser;
-                        val uid = user?.email.toString()
                         val intent = Intent(this, ChooseNumbersActivity::class.java)
-                        intent.putExtra("uID", uid)
                         startActivity(intent)
                         finish()
                     } else {

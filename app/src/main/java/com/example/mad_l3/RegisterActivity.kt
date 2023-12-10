@@ -20,7 +20,6 @@ import com.example.mad_l3.firestore.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -38,10 +37,10 @@ class RegisterActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        val nameinput = findViewById<EditText>(R.id.NameInput)
-        val emailinput = findViewById<EditText>(R.id.EmailInput)
-        val passwordinput = findViewById<EditText>(R.id.PasswordInput)
-        val repeatpasswordinput = findViewById<EditText>(R.id.RepeatPasswordInput)
+        val nameInput = findViewById<EditText>(R.id.NameInput)
+        val emailInput = findViewById<EditText>(R.id.EmailInput)
+        val passwordInput = findViewById<EditText>(R.id.PasswordInput)
+        val repeatPasswordInput = findViewById<EditText>(R.id.RepeatPasswordInput)
         val registerButton = findViewById<Button>(R.id.SubmitButton)
         registerButton.isEnabled = false
         val switcheryesno = findViewById<Switch>(R.id.switchyesno)
@@ -75,13 +74,13 @@ class RegisterActivity : AppCompatActivity() {
         loginLink.text = spannableString
         loginLink.movementMethod = LinkMovementMethod.getInstance()
 
-        registerButton.setOnClickListener() {
+        registerButton.setOnClickListener {
 
             // place to sendinformation to fire base and login user
-            val userName = nameinput.text.toString()
-            val userLogin = emailinput.text.toString()
-            val userPassword = passwordinput.text.toString()
-            val repeatedPassword = repeatpasswordinput.text.toString()
+            val userName = nameInput.text.toString()
+            val userLogin = emailInput.text.toString()
+            val userPassword = passwordInput.text.toString()
+            val repeatedPassword = repeatPasswordInput.text.toString()
 
             registerUser(userName, userLogin, userPassword, repeatedPassword)
         }
@@ -93,12 +92,12 @@ class RegisterActivity : AppCompatActivity() {
         name: String,
         email: String,
         password: String,
-        repeated_password: String):
+        repeatedPassword: String):
             Boolean {
 
         return when {
             // password and repeated password must be the same
-            password != repeated_password -> {
+            password != repeatedPassword -> {
                 showErrorSnackBar(rootView,"Passwords do not match")
                 false
             }
@@ -170,8 +169,8 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerUser(name: String, email: String, password: String, repeated_password: String) {
-        if (validateRegisterDetails(name, email, password, repeated_password)) {
+    private fun registerUser(name: String, email: String, password: String, repeatedPassword: String) {
+        if (validateRegisterDetails(name, email, password, repeatedPassword)) {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                     OnCompleteListener<AuthResult> { task ->
@@ -183,12 +182,7 @@ class RegisterActivity : AppCompatActivity() {
                                 "green"
                             )
                             val currentUserId = auth.currentUser?.uid.toString()
-                            val user = User(
-                                currentUserId,
-                                name,
-                                true,
-                                email,
-                            )
+                            val user = User(currentUserId, name,true, email)
                             FireStoreClass().registerUserFS(this, user)
                             val intent = Intent(this, ChooseNumbersActivity::class.java)
                             startActivity(intent)
