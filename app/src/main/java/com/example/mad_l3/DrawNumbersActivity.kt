@@ -9,12 +9,16 @@ import android.graphics.Color
 import android.view.View
 import android.os.Looper
 import com.example.mad_l3.custom_elements.CustomLottoBallView
+import com.example.mad_l3.firestore.FireStoreClass
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
-import com.example.mad_l3.firestore.FireStoreData
+import com.example.mad_l3.firestore.GameData
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.example.mad_l3.firestore.UserGames
+import java.security.KeyStore.TrustedCertificateEntry
+import android.util.Log
 
 class DrawNumbersActivity : AppCompatActivity() {
 
@@ -37,6 +41,9 @@ class DrawNumbersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         rootView = findViewById<View>(android.R.id.content)
         setContentView(R.layout.activity_third)
+
+        val intent = intent
+        val gameId = intent.getStringExtra("newGameId")
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
@@ -61,21 +68,23 @@ class DrawNumbersActivity : AppCompatActivity() {
 
         var userNumbers: IntArray? = IntArray(6)
 
-        db.collection("usersNumbers")
-            .document(auth.currentUser?.uid.toString())
+        db.collection("games")
+            .document(gameId!!)
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
-                    val dbData = documentSnapshot.toObject(FireStoreData::class.java)
+                    val dbData = documentSnapshot.toObject(GameData::class.java)
                     userNumbers = dbData?.selNumb?.toIntArray()
+                    Log.i("DrawNumbersActivity", "Game data retrieved successfully")
+                } else {
+                    Log.e("DrawNumbersActivity", "No such document")
                 }
             }
-            .addOnFailureListener { e ->
-                // Handle failure
-                println("Error getting document usersNumbers - " +
-                        "${FirebaseAuth.getInstance().currentUser?.uid}: $e")
+            .addOnFailureListener {
+                Log.e("DrawNumbersActivity", "Error while getting game data")
             }
 
+        var isTryAgain: Boolean = false
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.max = 6
@@ -100,7 +109,7 @@ class DrawNumbersActivity : AppCompatActivity() {
                 }
             }
 
-            val winningAmount = calculateWinningAmount(matches)
+            val winningAmount: Double = calculateWinningAmount(matches)
             val winText: String
             val winColor: String
             if (winningAmount > 0) {
@@ -151,24 +160,22 @@ class DrawNumbersActivity : AppCompatActivity() {
                         e.printStackTrace()
                     }
                     runOnUiThread {
-                        val updates = mapOf(
-                            "win" to winningAmount,
-                            "drawNumb" to drawnNumbers.toList()
-                        )
+                        if (!isTryAgain) {
+                            isTryAgain = true
+                            FireStoreClass().updateGame(gameId, winningAmount, drawnNumbers)
+                        } else {
+                            val newGame = GameData(
+                                selNumb = userNumbers?.toList(),
+                                drawNumb =  drawnNumbers,
+                                win = winningAmount
+                            )
+                            FireStoreClass().registerNewGame(
+                                newGame,
+                                auth.currentUser?.uid.toString()
+                            )
+                        }
 
-                        db.collection("usersNumbers")
-                            .document(auth.currentUser?.uid.toString())
-                            .update(updates)
-                            .addOnSuccessListener {
-                                // Handle success
-                                println("Document updated successfully in usersNumbers" +
-                                        "/${FirebaseAuth.getInstance().currentUser?.uid}")
-                            }
-                            .addOnFailureListener { e ->
-                                // Handle failure
-                                println("Error updating document in usersNumbers" +
-                                        "/${FirebaseAuth.getInstance().currentUser?.uid}: $e")
-                            }
+
                     }
                 }
             }.start()
@@ -176,13 +183,13 @@ class DrawNumbersActivity : AppCompatActivity() {
 
 
     }
-    private fun calculateWinningAmount(matches: Int): Int {
+    private fun calculateWinningAmount(matches: Int): Double {
         return when (matches) {
-            3 -> 24
-            4 -> 100
-            5 -> 10000
-            6 -> 1000000
-            else -> 0
+            3 -> 24.0
+            4 -> 100.0
+            5 -> 10000.0
+            6 -> 1000000.0
+            else -> 0.0
         }
     }
 

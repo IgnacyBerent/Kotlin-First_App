@@ -7,8 +7,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.NumberPicker
+import com.example.mad_l3.firestore.FireStoreClass
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
-import com.example.mad_l3.firestore.FireStoreData
+import com.example.mad_l3.firestore.GameData
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.firestore
 import com.example.mad_l3.firestore.User
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import android.util.Log
 
 
 class ChooseNumbersActivity : AppCompatActivity() {
@@ -46,13 +48,17 @@ class ChooseNumbersActivity : AppCompatActivity() {
                 if (document != null) {
                     val user = document.toObject<User>()
                     welcome_text.text = "Welcome ${user?.name}, \n please select your Lucky numbers!"
+                    Log.i("ChooseNumbersActivity", "User data retrieved successfully")
+                } else {
+                    Log.e("ChooseNumbersActivity", "No such document")
                 }
             }
-            .addOnFailureListener { exception ->
-                println("Error getting documents: $exception")
+            .addOnFailureListener {
+                Log.e("ChooseNumbersActivity", "Error while getting user data")
             }
 
         val selectedNumbers = mutableListOf<Int>()
+        var newGameId: String? = null
 
         // picking 6 numbers mechanism
         select_button.setOnClickListener() {
@@ -72,23 +78,18 @@ class ChooseNumbersActivity : AppCompatActivity() {
                     "green"
                 )
 
-                val fireStoreData = FireStoreData(currentUserUid, selectedNumbers, null, 0.0)
-
-                if (currentUserUid != null) {
-                    db.collection("usersNumbers")
-                        .document(currentUserUid)
-                        .set(fireStoreData)
-                        .addOnSuccessListener {
-                            println("Data saved successfully!")
-                        }
-                        .addOnFailureListener {
-                            println("Error saving data!")
-                        }
-                }
+                val newGame = GameData(
+                    selNumb =  selectedNumbers,
+                    drawNumb =  null,
+                    win = 0.0
+                )
+                newGameId = newGame.id
+                FireStoreClass().registerNewGame(newGame, currentUserUid)
             }
         }
         switch_activity_button.setOnClickListener() {
             val intent2 = Intent(this, DrawNumbersActivity::class.java)
+            intent.putExtra("newGameId", newGameId)
             startActivity(intent2)
         }
     }

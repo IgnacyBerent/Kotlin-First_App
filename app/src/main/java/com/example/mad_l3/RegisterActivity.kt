@@ -183,7 +183,7 @@ class RegisterActivity : AppCompatActivity() {
                             )
                             val currentUserId = auth.currentUser?.uid.toString()
                             val user = User(currentUserId, name,true, email)
-                            FireStoreClass().registerUserFS(this, user)
+                            FireStoreClass().registerUserFS(user)
                             val intent = Intent(this, ChooseNumbersActivity::class.java)
                             startActivity(intent)
                             finish()
