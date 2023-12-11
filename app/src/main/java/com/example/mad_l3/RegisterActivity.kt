@@ -17,8 +17,6 @@ import android.widget.Switch
 import android.widget.TextView
 import com.example.mad_l3.firestore.FireStoreClass
 import com.example.mad_l3.firestore.User
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +29,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        rootView = findViewById<View>(android.R.id.content)
+        rootView = findViewById(android.R.id.content)
         setContentView(R.layout.activity_register)
 
         auth = FirebaseAuth.getInstance()
@@ -43,14 +41,14 @@ class RegisterActivity : AppCompatActivity() {
         val repeatPasswordInput = findViewById<EditText>(R.id.RepeatPasswordInput)
         val registerButton = findViewById<Button>(R.id.SubmitButton)
         registerButton.isEnabled = false
-        val switcheryesno = findViewById<Switch>(R.id.switchyesno)
+        val switch = findViewById<Switch>(R.id.switchyesno)
 
-        switcheryesno.setOnCheckedChangeListener { _, isChecked ->
+        switch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                switcheryesno.text = "Yes"
+                switch.text = "Yes"
                 registerButton.isEnabled = true
             } else {
-                switcheryesno.text = "No"
+                switch.text = "No"
                 registerButton.isEnabled = false
             }
         }
@@ -172,25 +170,24 @@ class RegisterActivity : AppCompatActivity() {
     private fun registerUser(name: String, email: String, password: String, repeatedPassword: String) {
         if (validateRegisterDetails(name, email, password, repeatedPassword)) {
             auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                    OnCompleteListener<AuthResult> { task ->
-                        // If the registration is successfully done
-                        if (task.isSuccessful) {
-                            showErrorSnackBar(
-                                rootView,
-                                "Registration successful.",
-                                "green"
-                            )
-                            val currentUserId = auth.currentUser?.uid.toString()
-                            val user = User(currentUserId, name,true, email)
-                            FireStoreClass().registerUserFS(user)
-                            val intent = Intent(this, ChooseNumbersActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            showErrorSnackBar(rootView, "Registration failed. Please try again.")
-                        }
-                    })
+                .addOnCompleteListener { task ->
+                    // If the registration is successfully done
+                    if (task.isSuccessful) {
+                        showErrorSnackBar(
+                            rootView,
+                            "Registration successful.",
+                            "green"
+                        )
+                        val currentUserId = auth.currentUser?.uid.toString()
+                        val user = User(currentUserId, name, true, email)
+                        FireStoreClass().registerUserFS(user)
+                        val intent = Intent(this, ChooseNumbersActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        showErrorSnackBar(rootView, "Registration failed. Please try again.")
+                    }
+                }
         }
     }
 }

@@ -12,12 +12,8 @@ import com.example.mad_l3.custom_elements.CustomLottoBallView
 import com.example.mad_l3.firestore.FireStoreClass
 import com.example.mad_l3.project_functions.SnackbarHelper.showErrorSnackBar
 import com.example.mad_l3.firestore.GameData
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.example.mad_l3.firestore.UserGames
-import java.security.KeyStore.TrustedCertificateEntry
 import android.util.Log
 
 class DrawNumbersActivity : AppCompatActivity() {
@@ -39,7 +35,7 @@ class DrawNumbersActivity : AppCompatActivity() {
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        rootView = findViewById<View>(android.R.id.content)
+        rootView = findViewById(android.R.id.content)
         setContentView(R.layout.activity_third)
 
         val intent = intent
@@ -84,7 +80,7 @@ class DrawNumbersActivity : AppCompatActivity() {
                 Log.e("DrawNumbersActivity", "Error while getting game data")
             }
 
-        var isTryAgain: Boolean = false
+        var isTryAgain = false
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.max = 6

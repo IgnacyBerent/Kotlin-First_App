@@ -27,14 +27,14 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        rootView = findViewById<View>(android.R.id.content)
+        rootView = findViewById(android.R.id.content)
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
 
-        val emailinput = findViewById<EditText>(R.id.EmailInput)
-        val passwordinput = findViewById<EditText>(R.id.PasswordInput)
+        val emailInput = findViewById<EditText>(R.id.EmailInput)
+        val passwordInput = findViewById<EditText>(R.id.PasswordInput)
         val loginButton = findViewById<Button>(R.id.SubmitButton)
 
         val registerLink = findViewById<TextView>(R.id.registerLink)
@@ -56,9 +56,9 @@ class LoginActivity : AppCompatActivity() {
         registerLink.text = spannableString
         registerLink.movementMethod = LinkMovementMethod.getInstance()
 
-        loginButton.setOnClickListener() {
-            val email = emailinput.text.toString()
-            val password = passwordinput.text.toString()
+        loginButton.setOnClickListener {
+            val email = emailInput.text.toString()
+            val password = passwordInput.text.toString()
             loginUser(email, password)
         }
 
