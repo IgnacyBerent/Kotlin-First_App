@@ -88,9 +88,9 @@ class ChooseNumbersActivity : AppCompatActivity() {
             }
         }
         switch_activity_button.setOnClickListener() {
-            val intent2 = Intent(this, DrawNumbersActivity::class.java)
+            val intent = Intent(this, DrawNumbersActivity::class.java)
             intent.putExtra("newGameId", newGameId)
-            startActivity(intent2)
+            startActivity(intent)
         }
     }
 }

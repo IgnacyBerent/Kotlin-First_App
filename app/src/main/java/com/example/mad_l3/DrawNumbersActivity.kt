@@ -152,30 +152,26 @@ class DrawNumbersActivity : AppCompatActivity() {
                             showErrorSnackBar(rootView, winText, winColor)
                             getNumbersButton.text = "TRY AGAIN!"
                             getNumbersButton.isEnabled = true
+                            if (!isTryAgain) {
+                                isTryAgain = true
+                                FireStoreClass().updateGame(gameId, winningAmount, drawnNumbers)
+                            } else {
+                                val newGame = GameData(
+                                    selNumb = userNumbers?.toList(),
+                                    drawNumb =  drawnNumbers,
+                                    win = winningAmount
+                                )
+                                FireStoreClass().registerNewGame(
+                                    newGame,
+                                    auth.currentUser?.uid.toString()
+                                )
+                            }
                         }
                     }
                     try {
                         Thread.sleep(delayMillis)
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
-                    }
-                    runOnUiThread {
-                        if (!isTryAgain) {
-                            isTryAgain = true
-                            FireStoreClass().updateGame(gameId, winningAmount, drawnNumbers)
-                        } else {
-                            val newGame = GameData(
-                                selNumb = userNumbers?.toList(),
-                                drawNumb =  drawnNumbers,
-                                win = winningAmount
-                            )
-                            FireStoreClass().registerNewGame(
-                                newGame,
-                                auth.currentUser?.uid.toString()
-                            )
-                        }
-
-
                     }
                 }
             }.start()
