@@ -65,6 +65,7 @@ class DrawNumbersActivity : AppCompatActivity() {
 
         var userNumbers: IntArray? = IntArray(6)
 
+        // looks for game currently played by user and retrieves his numbers
         db.collection("games")
             .document(gameId!!)
             .get()
@@ -154,6 +155,7 @@ class DrawNumbersActivity : AppCompatActivity() {
                             showErrorSnackBar(rootView, winText, winColor)
                             getNumbersButton.text = "TRY AGAIN!"
                             getNumbersButton.isEnabled = true
+                            //creates new game if user played again with the same numbers
                             if (!isTryAgain) {
                                 isTryAgain = true
                                 FireStoreClass().updateGame(gameId, winningAmount, drawnNumbers)
