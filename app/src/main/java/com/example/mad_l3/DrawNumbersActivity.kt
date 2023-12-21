@@ -107,7 +107,9 @@ class DrawNumbersActivity : AppCompatActivity() {
                 }
             }
 
-            val winners = simPlayers(doubleArrayOf(7.2e-8,1.8e-5,0.00097,0.077))
+            val winners = simPlayers(
+                doubleArrayOf(7.2e-8,1.8e-5,0.00097,0.077),
+                numberOfPopulation = 10000)
             val winningAmount: Double = calculateWin(
                 Random.nextDouble(0.0, 50e6),
                 winners,
