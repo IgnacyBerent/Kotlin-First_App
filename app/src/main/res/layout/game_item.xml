@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="2dp">
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Date Text" />
+
+    <TextView
+        android:id="@+id/selNumbersTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Numbers Text" />
+
+    <TextView
+        android:id="@+id/drawnNumbersTextView"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Drawn Text" />
+
+    <TextView
+        android:id="@+id/winTextView"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Win Text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="8dp"
+        android:background="@android:color/darker_gray" />
+
+</LinearLayout>

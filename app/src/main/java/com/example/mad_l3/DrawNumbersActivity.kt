@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import kotlin.random.Random
+import android.content.Intent
 
 class DrawNumbersActivity : AppCompatActivity() {
 
@@ -82,6 +83,13 @@ class DrawNumbersActivity : AppCompatActivity() {
                 Log.e("DrawNumbersActivity", "Error while getting game data")
             }
 
+        val nextActivityButton = findViewById<Button>(R.id.nextActivityButton)
+        nextActivityButton.isEnabled = false
+        nextActivityButton.setOnClickListener {
+            val intent = Intent(this, StatisticsActivity::class.java)
+            startActivity(intent)
+        }
+
         var isTryAgain = false
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
@@ -90,6 +98,9 @@ class DrawNumbersActivity : AppCompatActivity() {
         val handler = Handler(Looper.getMainLooper())
 
         getNumbersButton.setOnClickListener {
+
+            // block button to prevent user from clicking during animation
+            nextActivityButton.isEnabled = false
 
             // make all balls invisible
             for (ball in balls) {
@@ -172,6 +183,8 @@ class DrawNumbersActivity : AppCompatActivity() {
                                     auth.currentUser?.uid.toString()
                                 )
                             }
+                            // enable button to go to next activity
+                            nextActivityButton.isEnabled = true
                         }
                     }
                     try {

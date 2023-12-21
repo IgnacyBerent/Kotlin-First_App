@@ -88,6 +88,7 @@ class ChooseNumbersActivity : AppCompatActivity() {
             val intent = Intent(this, DrawNumbersActivity::class.java)
             intent.putExtra("newGameId", newGameId)
             startActivity(intent)
+            finish()
         }
     }
 }

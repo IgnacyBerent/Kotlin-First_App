@@ -74,5 +74,51 @@ class FireStoreClass {
 
     }
 
+    private fun getGameIdsForUser(userId: String, callback: (List<String>) -> Unit) {
+    mFireStore.collection("usersGames")
+        .document(userId)
+        .get()
+        .addOnSuccessListener { document ->
+            if (document != null) {
+                val gameIds = document.get("gamesId") as List<String>
+                callback(gameIds)
+            } else {
+                Log.d("FireStoreClass", "No such document")
+            }
+        }
+        .addOnFailureListener { exception ->
+            Log.d("FireStoreClass", "get failed with ", exception)
+        }
+    }
+
+    fun getGamesForUser(userId: String, callback: (List<GameData>) -> Unit) {
+        getGameIdsForUser(userId) { gameIds ->
+            val games = mutableListOf<GameData>()
+            var counter = 0
+            for (gameId in gameIds) {
+                mFireStore.collection("games")
+                    .document(gameId)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            val game = document.toObject(GameData::class.java)
+                            if (game != null) {
+                                games.add(game)
+                            }
+                        } else {
+                            Log.d("FireStoreClass", "No such document")
+                        }
+                        counter++
+                        if (counter == gameIds.size) {
+                            callback(games)
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("FireStoreClass", "get failed with ", exception)
+                    }
+            }
+        }
+    }
+
 
 }
