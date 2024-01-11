@@ -13,6 +13,7 @@ class StatisticsActivity : AppCompatActivity() {
 
     private lateinit var fireStoreClass: FireStoreClass
     private lateinit var auth: FirebaseAuth
+    val uid = auth.currentUser?.uid.toString()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +29,7 @@ class StatisticsActivity : AppCompatActivity() {
 
         val currentUserId = auth.currentUser?.uid
         fireStoreClass.getGamesForUser(currentUserId!!) { games ->
-            val gameAdapter = GameAdapter(games)
+            val gameAdapter = GameAdapter(uid, games)
             newRecyclerView.adapter = gameAdapter
         }
     }

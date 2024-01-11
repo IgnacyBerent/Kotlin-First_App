@@ -120,5 +120,28 @@ class FireStoreClass {
         }
     }
 
+    fun deleteGame(gameId: String, userId: String){
+
+        mFireStore.collection("games")
+            .document(gameId)
+            .delete()
+            .addOnSuccessListener{
+                Log.i("FireStoreClass", "Game deleted")
+                mFireStore.collection("usersGames")
+                    .document(userId)
+                    .update("gamesId", FieldValue.arrayRemove(gameId))
+                    .addOnSuccessListener{
+                        Log.i("FireStoreClass", "Game removed from userGames")
+                    }
+                    .addOnFailureListener{
+                        Log.e("FireStoreClass", "Error while removing game from userGames")
+                    }
+            }
+            .addOnFailureListener{
+                Log.e("FireStoreClass", "Error while deleting game")
+            }
+
+    }
+
 
 }
