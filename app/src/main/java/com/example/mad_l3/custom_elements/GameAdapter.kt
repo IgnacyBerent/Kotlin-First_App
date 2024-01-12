@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -37,8 +38,8 @@ class GameAdapter(private var uid: String , private var gamesDataList: List<Game
 
     class MyGameHolder(itemView: View, private val gamesDataList: List<GameData>) : RecyclerView.ViewHolder(itemView) {
 
-        val gameDate = itemView.findViewById<TextView>(R.id.dateTextView)
-        val deleteButton = itemView.findViewById<TextView>(R.id.deleteButton)
+        val gameDate: TextView = itemView.findViewById<TextView>(R.id.dateTextView)
+        val deleteButton: Button = itemView.findViewById<Button>(R.id.deleteButton)
         init {
             itemView.setOnClickListener { view: View ->
                 val position: Int = adapterPosition

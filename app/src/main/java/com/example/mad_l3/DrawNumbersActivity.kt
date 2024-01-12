@@ -17,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
 import kotlin.random.Random
 import android.content.Intent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DrawNumbersActivity : AppCompatActivity() {
 
@@ -33,7 +35,6 @@ class DrawNumbersActivity : AppCompatActivity() {
         Color.GREEN,
     )
     private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
     private lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +42,11 @@ class DrawNumbersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_third)
 
         val intent = intent
-        val gameId = intent.getStringExtra("newGameId")
+        val gameId = intent.getStringExtra("newGameId")!!
 
         auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
+
+        val UserId: String = auth.currentUser?.uid.toString()
 
         val getNumbersButton = findViewById<Button>(R.id.getnumbers_button)
         // I have created my own custom view - CustomLottoBallView
@@ -66,22 +68,9 @@ class DrawNumbersActivity : AppCompatActivity() {
 
         var userNumbers: IntArray? = IntArray(6)
 
-        // looks for game currently played by user and retrieves his numbers
-        db.collection("games")
-            .document(gameId!!)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val dbData = documentSnapshot.toObject(GameData::class.java)
-                    userNumbers = dbData?.selNumb?.toIntArray()
-                    Log.i("DrawNumbersActivity", "Game data retrieved successfully")
-                } else {
-                    Log.e("DrawNumbersActivity", "No such document")
-                }
-            }
-            .addOnFailureListener {
-                Log.e("DrawNumbersActivity", "Error while getting game data")
-            }
+        GlobalScope.launch {
+            val selectedNumbers = FireStoreClass().getSelectedNumbers(UserId, gameId).await()
+        }
 
         val nextActivityButton = findViewById<Button>(R.id.nextActivityButton)
         nextActivityButton.isEnabled = false
@@ -158,7 +147,7 @@ class DrawNumbersActivity : AppCompatActivity() {
                         ball.visibility = View.VISIBLE
                         // If a ball number matches a guess number,
                         // number on the ball is colored green, otherwise red
-                        if (ball.getNumber().toInt() in userNumbers!!) {
+                        if (ball.getNumber().toInt() in selectedNumbers) {
                             ball.setTextColor(Color.GREEN)
                         } else {
                             ball.setTextColor(Color.RED)
@@ -171,10 +160,10 @@ class DrawNumbersActivity : AppCompatActivity() {
                             //creates new game if user played again with the same numbers
                             if (!isTryAgain) {
                                 isTryAgain = true
-                                FireStoreClass().updateGame(gameId, winningAmount, drawnNumbers)
+                                FireStoreClass().updateGame(UserId ,gameId, winningAmount, drawnNumbers)
                             } else {
                                 val newGame = GameData(
-                                    selNumb = userNumbers?.toList(),
+                                    selNumb = selectedNumbers,
                                     drawNumb =  drawnNumbers,
                                     win = winningAmount
                                 )
